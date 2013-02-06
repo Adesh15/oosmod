@@ -486,6 +486,17 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 		return;
 	}
 
+	if (!enable_msm_hsic_ws && !strcmp(ws->name, "msm_hsic_host")) {
+                pr_debug("wakeup source msm_hsic_host activate skipped\n");
+                return;
+        }
+
+	/*
+	 * active wakeup source should bring the system
+	 * out of PM_SUSPEND_FREEZE state
+	 */
+	freeze_wake();
+
 	ws->active = true;
 	ws->active_count++;
 	ws->last_time = ktime_get();
