@@ -27,6 +27,10 @@
 #include <linux/state_notifier.h>
 #endif
 
+#ifdef CONFIG_STATE_NOTIFIER
+#include <linux/state_notifier.h>
+#endif
+
 #include "mdss.h"
 #include "mdss_panel.h"
 #include "mdss_dsi.h"
@@ -1069,7 +1073,12 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		ctrl_pdata->ctrl_state |= CTRL_STATE_MDP_ACTIVE;
 		if (ctrl_pdata->on_cmds.link_state == DSI_HS_MODE)
 			rc = mdss_dsi_unblank(pdata);
-
+#ifdef CONFIG_STATE_NOTIFIER
+		if (!use_fb_notifier)
+			state_notifier_call_chain(STATE_NOTIFIER_ACTIVE, NULL);
+#endif
+		state_suspended = false;
+		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
 		state_suspended = false;
 		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
 
@@ -1088,7 +1097,12 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_blank(pdata);
 		rc = mdss_dsi_off(pdata);
-
+#ifdef CONFIG_STATE_NOTIFIER
+		if (!use_fb_notifier)
+			state_notifier_call_chain(STATE_NOTIFIER_SUSPEND, NULL);
+#endif
+		state_suspended = true;
+		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
 		state_suspended = true;
 		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
 
@@ -1797,3 +1811,4 @@ module_exit(mdss_dsi_driver_cleanup);
 MODULE_LICENSE("GPL v2");
 MODULE_DESCRIPTION("DSI controller driver");
 MODULE_AUTHOR("Chandan Uddaraju <chandanu@codeaurora.org>");
+
