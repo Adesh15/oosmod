@@ -27,10 +27,6 @@
 #include <linux/state_notifier.h>
 #endif
 
-#ifdef CONFIG_STATE_NOTIFIER
-#include <linux/state_notifier.h>
-#endif
-
 #include "mdss.h"
 #include "mdss_panel.h"
 #include "mdss_dsi.h"
@@ -1073,19 +1069,7 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		ctrl_pdata->ctrl_state |= CTRL_STATE_MDP_ACTIVE;
 		if (ctrl_pdata->on_cmds.link_state == DSI_HS_MODE)
 			rc = mdss_dsi_unblank(pdata);
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_notifier_call_chain(STATE_NOTIFIER_ACTIVE, NULL);
-#endif
 		state_suspended = false;
-		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
-		state_suspended = false;
-		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
-
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_notifier_call_chain(STATE_NOTIFIER_ACTIVE, NULL);
-#endif
 		break;
 	case MDSS_EVENT_BLANK:
 		lcd_notifier_call_chain(LCD_EVENT_OFF_START, NULL);
@@ -1097,19 +1081,7 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_blank(pdata);
 		rc = mdss_dsi_off(pdata);
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_notifier_call_chain(STATE_NOTIFIER_SUSPEND, NULL);
-#endif
 		state_suspended = true;
-		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
-		state_suspended = true;
-		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
-
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_notifier_call_chain(STATE_NOTIFIER_SUSPEND, NULL);
-#endif
 		break;
 	case MDSS_EVENT_CONT_SPLASH_FINISH:
 	/* 2013-10-18 added begin for continous splash */
