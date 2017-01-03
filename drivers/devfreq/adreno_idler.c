@@ -69,25 +69,11 @@ static unsigned int idlecount = 0;
 int adreno_idler(struct devfreq_dev_status stats, struct devfreq *devfreq,
 		 unsigned long *freq)
 {
-	unsigned long cur_freq;
-	int freq_level;
+	/* Boolean to let us know if the display is on*/
+	bool display_on = is_display_on();
 
 	if (!adreno_idler_active)
 		return 0;
-
-	devfreq->profile->get_cur_freq(devfreq->dev.parent, &cur_freq);
-	freq_level = devfreq_get_freq_level(devfreq, cur_freq);
-
-	/* 1. Idler will not be applied with highest freq level */
-	/* 2. Define another threshold (idleworkload * 0.75) for lowest freq level to turnover */
-	if (freq_level == 0 ||
-		(freq_level == (devfreq->profile->max_state - 1) && stats.busy_time > (idleworkload * 3 / 4))) {
-		idlecount = 0;
-		return 0;
-	}
-
-	/* Boolean to let us know if the display is on*/
-	bool display_on = is_display_on();
 
 	if (stats.busy_time < idleworkload) {
 		/* busy_time >= idleworkload should be considered as a non-idle workload. */
