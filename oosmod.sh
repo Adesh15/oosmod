@@ -25,15 +25,17 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 
-make clean && make mrproper
+# make clean && make mrproper
 export ARCH=arm
 export CROSS_COMPILE="$ROOT_PATH/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
+export KBUILD_BUILD_USER="adesh15"
+export KBUILD_BUILD_HOST="galaxy"
 
 compile_kernel ()
 {
 echo -e "**********************************************************************************************"
 echo "                    "
-echo "                              Compiling Arsenic.Kernel for OOS with GCC 4.9                  "
+echo "                              Compiling oosmod Kernel                  "
 echo "                    "
 echo -e "**********************************************************************************************"
 make onyx_defconfig
@@ -65,7 +67,7 @@ cd $KERNEL_DIR
 }
 
 zipping() {
-rm -rf $OUT_DIR/arsenic*.zip
+rm -rf $OUT_DIR/oosmod*.zip
 rm -rf $OUT_DIR/zImage
 rm -rf $OUT_DIR/dtb
 cp $KERN_IMG $OUT_DIR/zImage
@@ -77,11 +79,11 @@ case "$buildtype" in
 	y | Y)
 		echo "test build number?:"
 		read BN
-		zip -r arsenic.kernel-onyx_OOS.V$VER-test-$BN.zip *
+		zip -r oosmod.kernel-onyx_OOS.V$VER-test-$BN.zip *
 		echo "Test Build no. $BN of V$VER Ready..!"
 		;;
 	*)
-		zip -r arsenic.kernel-onyx_OOS.V$VER-$(date +"%Y%m%d").zip *
+		zip -r oosmod.kernel-onyx_OOS.V$VER-$(date +"%Y%m%d").zip *
 		echo "Release Build V$VER Ready..!!"
 		;;
 esac
