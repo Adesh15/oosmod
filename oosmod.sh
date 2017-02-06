@@ -28,8 +28,6 @@ nocol='\033[0m'
 # make clean && make mrproper
 export ARCH=arm
 export CROSS_COMPILE="$ROOT_PATH/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
-export KBUILD_BUILD_USER="adesh15"
-export KBUILD_BUILD_HOST="galaxy"
 
 compile_kernel ()
 {
