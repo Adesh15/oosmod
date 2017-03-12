@@ -78,8 +78,8 @@ static int rails_cnt;
 static int psm_rails_cnt;
 static int ocr_rail_cnt;
 static int limit_idx;
-static int limit_idx_low = 8;
-static int limit_idx_high = 20;
+static int limit_idx_low = 1;
+static int limit_idx_high = 25;
 static int max_tsens_num;
 static struct cpufreq_frequency_table *table;
 static uint32_t usefreq;
@@ -1340,7 +1340,7 @@ exit:
 	return ret;
 }
 
-static void __ref do_freq_control(long temp)
+static void do_freq_control(long temp)
 {
 	uint32_t cpu = 0;
 	uint32_t max_freq = cpus[cpu].limited_max_freq;
@@ -1382,7 +1382,7 @@ static void __ref do_freq_control(long temp)
 	put_online_cpus();
 }
 
-static void __ref check_temp(struct work_struct *work)
+static void check_temp(struct work_struct *work)
 {
 	static int limit_init;
 	long temp = 0;
@@ -1400,6 +1400,10 @@ static void __ref check_temp(struct work_struct *work)
 		goto reschedule;
 	}
 
+	do_core_control(temp);
+	do_psm();
+	do_ocr();
+
 	if (!limit_init) {
 		ret = msm_thermal_get_freq_table();
 		if (ret)
@@ -1408,10 +1412,7 @@ static void __ref check_temp(struct work_struct *work)
 			limit_init = 1;
 	}
 
-	do_core_control(temp);
 	do_vdd_restriction();
-	do_psm();
-	do_ocr();
 	do_freq_control(temp);
 
 reschedule:
@@ -1447,7 +1448,6 @@ static void thermal_rtc_setup(void)
 {
 	ktime_t wakeup_time;
 	ktime_t curr_time;
-
 	curr_time = alarm_get_elapsed_realtime();
 	wakeup_time = ktime_add_us(curr_time,
 			(wakeup_ms * USEC_PER_MSEC));
@@ -1459,14 +1459,11 @@ static void thermal_rtc_setup(void)
 			ktime_to_timeval(curr_time).tv_usec,
 			ktime_to_timeval(wakeup_time).tv_sec,
 			ktime_to_timeval(wakeup_time).tv_usec);
-
 }
-
 static void timer_work_fn(struct work_struct *work)
 {
 	sysfs_notify(tt_kobj, NULL, "wakeup_ms");
 }
-
 static void thermal_rtc_callback(struct alarm *al)
 {
 	struct timeval ts;
@@ -2155,19 +2152,16 @@ static ssize_t show_wakeup_ms(struct kobject *kobj,
 {
 	return snprintf(buf, PAGE_SIZE, "%d\n", wakeup_ms);
 }
-
 static ssize_t store_wakeup_ms(struct kobject *kobj,
 		struct kobj_attribute *attr, const char *buf, size_t count)
 {
 	int ret;
 	ret = kstrtouint(buf, 10, &wakeup_ms);
-
 	if (ret) {
 		pr_err("%s: Trying to set invalid wakeup timer\n",
 				KBUILD_MODNAME);
 		return ret;
 	}
-
 	if (wakeup_ms > 0) {
 		thermal_rtc_setup();
 		pr_debug("%s: Timer started for %ums\n", KBUILD_MODNAME,
@@ -2179,19 +2173,15 @@ static ssize_t store_wakeup_ms(struct kobject *kobj,
 		else
 			pr_debug("%s: No active timer present to cancel\n",
 					KBUILD_MODNAME);
-
 	}
 	return count;
 }
-
 static __refdata struct kobj_attribute timer_attr =
 __ATTR(wakeup_ms, 0644, show_wakeup_ms, store_wakeup_ms);
-
 static __refdata struct attribute *tt_attrs[] = {
 	&timer_attr.attr,
 	NULL,
 };
-
 static __refdata struct attribute_group tt_attr_group = {
 	.attrs = tt_attrs,
 };
