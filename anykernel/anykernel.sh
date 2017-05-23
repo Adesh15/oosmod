@@ -10,7 +10,7 @@
 do.devicecheck=1
 do.initd=0
 do.modules=1
-do.cleanup=1
+do.cleanup=0
 device.name1=OnePlus
 device.name2=ONE
 device.name3=onyx
@@ -305,17 +305,15 @@ dump_boot;
 
 # AnyKernel permissions
 chmod 755 $ramdisk/sbin/busybox
-chmod -R 755 $ramdisk/sbin/arsenic-post_boot.sh
 
 # ramdisk changes
 # backup_file default.prop;
 # replace_string default.prop "ro.adb.secure=0" "ro.adb.secure=1" "ro.adb.secure=0";
 # replace_string default.prop "ro.secure=0" "ro.secure=1" "ro.secure=0";
 
-# init.onyx.rc
-# backup_file init.onyx.rc;
-# append_file init.onyx.rc "arsenic-post_boot" init.onyx.patch;
-
+insert_line init.qcom.rc "init.spectrum.rc" after "import init.target.rc" "import /init.spectrum.rc"
+chmod 750 $ramdisk/init.spectrum.sh;
+chmod 750 $ramdisk/init.spectrum.rc;
 
 ############### Ramdisk customization end ###############
 

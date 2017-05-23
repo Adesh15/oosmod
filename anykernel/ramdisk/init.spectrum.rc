@@ -1,0 +1,235 @@
+# SPECTRUM KERNEL MANAGER
+# Ramdisk file for profile based kernel management
+
+# Initialization
+on property:sys.boot_completed=1
+# Set default profile on first boot
+exec u:r:init:s0 root root -- /init.spectrum.sh
+exec u:r:su:s0 root root -- /init.spectrum.sh
+# Enable Spectrum support
+   setprop spectrum.support 1
+   setprop persist.spectrum.kernel moDDed
+
+
+
+# Balance (default profile)
+
+on property:persist.spectrum.profile=0
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1728000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1728000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1728000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1728000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/class/leds/lcd-backlight/max_brightness 255
+write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 389000000
+write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 27000000
+write /sys/devices/system/cpu/sched_mc_power_savings 2
+write /sys/block/mmcblk0/queue/read_ahead_kb 1024
+write /sys/block/mmcblk0/queue/scheduler bfq
+write /sys/kernel/fast_charge/force_fast_charge 1
+# Disabling wakelocks by default
+write /sys/module/wakeup/parameters/enable_bluesleep_ws N
+write /sys/module/wakeup/parameters/enable_si_ws N
+write /sys/module/wakeup/parameters/enable_msm_hsic_ws N
+write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_wake_ws N
+
+# Performance
+
+on property:persist.spectrum.profile=1
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor ondemand
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor ondemand
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor ondemand
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 883000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 883000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 883000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 883000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2265000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 2265000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2265000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 2265000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/class/leds/lcd-backlight/max_brightness 255
+write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 389000000
+write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 27000000
+write /sys/devices/system/cpu/sched_mc_power_savings 0
+write /sys/block/mmcblk0/queue/read_ahead_kb 1024
+write /sys/block/mmcblk0/queue/scheduler row
+write /sys/kernel/fast_charge/force_fast_charge 1
+# Disabling wakelocks by default
+write /sys/module/wakeup/parameters/enable_bluesleep_ws N
+write /sys/module/wakeup/parameters/enable_si_ws N
+write /sys/module/wakeup/parameters/enable_msm_hsic_ws N
+write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_wake_ws N
+
+# Battery
+
+on property:persist.spectrum.profile=2
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor zzmoove
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor zzmoove
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor zzmoove
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor zzmoove
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1267200
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1267200
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1267200
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1267200
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/class/leds/lcd-backlight/max_brightness 100
+write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 200000000
+write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 27000000
+write /sys/devices/system/cpu/sched_mc_power_savings 2
+write /sys/devices/system/cpu/cpufreq/zzmoove/profile_number 3
+write /sys/block/mmcblk0/queue/read_ahead_kb 1024
+write /sys/block/mmcblk0/queue/scheduler zen
+write /sys/kernel/fast_charge/force_fast_charge 1
+# Disabling wakelocks by default
+write /sys/module/wakeup/parameters/enable_bluesleep_ws N
+write /sys/module/wakeup/parameters/enable_si_ws N
+write /sys/module/wakeup/parameters/enable_msm_hsic_ws N
+write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_wake_ws N
+
+# Gaming
+
+on property:persist.spectrum.profile=3
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor Lionheart
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor Lionheart
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor Lionheart
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor Lionheart
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 652000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 652000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 652000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 652000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+chmod 644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1958000
+chmod 444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1958000
+chmod 444 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1958000
+chmod 444 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+chmod 644 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1958000
+chmod 444 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+write /sys/class/leds/lcd-backlight/max_brightness 255
+write /sys/class/kgsl/kgsl-3d0/devfreq/governor performance
+write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 578000000
+write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 33000000
+write /sys/devices/system/cpu/sched_mc_power_savings 1
+write /sys/block/mmcblk0/queue/read_ahead_kb 1024
+write /sys/block/mmcblk0/queue/scheduler row
+write /sys/kernel/fast_charge/force_fast_charge 1
+# Disabling wakelocks by default
+write /sys/module/wakeup/parameters/enable_bluesleep_ws N
+write /sys/module/wakeup/parameters/enable_si_ws N
+write /sys/module/wakeup/parameters/enable_msm_hsic_ws N
+write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws N
+write /sys/module/wakeup/parameters/enable_wlan_wake_ws N
+
