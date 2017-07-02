@@ -314,6 +314,7 @@ chmod 755 $ramdisk/sbin/busybox
 insert_line init.qcom.rc "init.spectrum.rc" after "import init.target.rc" "import /init.spectrum.rc"
 chmod 750 $ramdisk/init.spectrum.sh;
 chmod 750 $ramdisk/init.spectrum.rc;
+replace_section init.qcom.rc "service mpdecision" "disabled" "#service mpdecision /system/bin/mpdecision --avg_comp\n#    class main\n#    user root\n#    group system\n#    disabled"
 
 ############### Ramdisk customization end ###############
 
